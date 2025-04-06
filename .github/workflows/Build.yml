@@ -1,0 +1,25 @@
+name: Build Borderless-Gaming EXE
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Repository auschecken
+      uses: actions/checkout@v3
+
+    - name: Mit MSBuild kompilieren
+      run: |
+        nuget restore BorderlessGaming.sln
+        msbuild BorderlessGaming.sln /p:Configuration=Release
+
+    - name: .exe als Artefakt hochladen
+      uses: actions/upload-artifact@v3
+      with:
+        name: Borderless-Gaming-EXE
+        path: BorderlessGaming\bin\Release\BorderlessGaming.exe
